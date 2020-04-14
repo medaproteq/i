@@ -1,0 +1,30 @@
+ErrorDocument 403 /404.html
+ErrorDocument 404 /404.html
+
+DirectoryIndex page9697098.html
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} /robots.txt
+RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
+RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+RewriteRule ^1$ page9700618.html [NC]
+RewriteRule ^1/$ page9700618.html [NC]
+
+RewriteRule ^cooc$ page9700653.html [NC]
+RewriteRule ^cooc/$ page9700653.html [NC]
+
+RewriteRule ^con$ page9700730.html [NC]
+RewriteRule ^con/$ page9700730.html [NC]
+
+RewriteRule ^2$ page9712490.html [NC]
+RewriteRule ^2/$ page9712490.html [NC]
+
+RewriteRule ^thanks$ page9777877.html [NC]
+RewriteRule ^thanks/$ page9777877.html [NC]
+
+RewriteRule ^66666$ page9843533.html [NC]
+RewriteRule ^66666/$ page9843533.html [NC]
+
+RewriteRule ^favicon.ico$ https://static.tildacdn.com/tild3234-3461-4661-b761-613837396433/OXYCLEAN_ITC-3_2.ico [R=302,L]
+
